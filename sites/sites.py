@@ -1,4 +1,7 @@
+from bs4 import BeautifulSoup as bs4
 from selenium import webdriver
+
+from user_info import PETER_PAN_URL
 from utils.driverutils import DriverUtils
 import time
 
@@ -30,4 +33,38 @@ class Naver(object):
         self.driver.execute_script("document.getElementsByName('pw')[0].value=\'" + user_pw + "\'")
         self.driver.find_element_by_xpath('//*[@id="frmNIDLogin"]/fieldset/input').click()
 
-        self.driver.find_element_by_xpath('//*[@id="frmNIDLogin"]/fieldset/input').click()
+        # self.driver.find_element_by_xpath('//*[@id="frmNIDLogin"]/fieldset/input').click()
+        # self.driver.get('https://cafe.naver.com/kig')
+
+    def move_to_new_url(self, url):
+        time.sleep(2)
+        self.driver.get(url)
+        # self.explicit_wait_time = 1
+        # self.driver_utils = DriverUtils(self.driver)
+
+    def get_to_information(self):
+        # self.driver.find_element_by_xpath(xpath).click()
+        # print(self.driver)
+        #
+        base_url = 'https://cafe.naver.com/ArticleList.nhn?search.clubid=10322296&search.menuid=1104&search.boardtype=L'
+
+        self.driver.get(base_url + '&search.menuid=1104&search.page=1')
+        self.driver.switch_to.frame('cafe_main')
+        soup = bs4(self.driver.page_source, 'html.parser')
+        t = soup.select(
+            '#main-area > div:nth-child(5) > table > tbody > tr:nth-child(1) > td.td_article > div.board-list > div > a')
+        print(t)
+        # html = self.driver.page_source
+        # list_= self.driver.find_element_by_xpath('#main-area > div:nth-child(5) > table > tbody')
+        # list_ = self.driver.find_element_by_xpath('//*[@id="main-area"]/div[4]/table/tbody')
+        # print('html')
+        # print(html)
+
+        # soup = bs4(html, 'html.parser')
+        # print('soup')
+        # print(soup)
+        # list = soup.select('#main-area')
+        # list = soup.select()
+        # print(list_)
+        # for i in list_:
+        #     print(i.text.strip())
